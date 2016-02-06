@@ -6,7 +6,6 @@ public class Player : MonoBehaviour {
     int w;
     int h;
     Vector3 limxy, limXY;
-    public float divPix;
     private BoxCollider2D box;
     private float bleft, bright, bup, bdown;
     private bool grabbed;
@@ -17,6 +16,7 @@ public class Player : MonoBehaviour {
         bright = transform.position.x + box.offset.x + (box.size.x / 2);
         bup = transform.position.y + box.offset.y + (box.size.y / 2);
         bdown = transform.position.y + box.offset.y - (box.size.y / 2);
+        Manager.gManager.player = this;
     }
 	
 	// Update is called once per frame
