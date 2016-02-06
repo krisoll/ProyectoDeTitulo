@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: aec606bc3da52094c96126b2c1ca94ac
 timeCreated: 1454699656
+=======
+guid: 60ef88c50f64b354dbe03014da8c84fe
+timeCreated: 1454699168
+>>>>>>> origin/master
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -30,7 +35,11 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
+<<<<<<< HEAD
     aniso: 16
+=======
+    aniso: -1
+>>>>>>> origin/master
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
