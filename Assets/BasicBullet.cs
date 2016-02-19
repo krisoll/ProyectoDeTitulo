@@ -15,10 +15,11 @@ public class BasicBullet : MonoBehaviour {
         ImpulsoAngular(transform.eulerAngles.z);
 	}
 	
-	// Update is called once per frame
+	/* Update is called once per frame
 	void Update () {
 	
 	}
+    */
     public void ImpulsoAngular(float angulo)
     {
         float angle = angulo * Mathf.Deg2Rad;
