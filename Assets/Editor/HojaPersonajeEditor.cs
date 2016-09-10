@@ -14,7 +14,10 @@ public class HojaPersonajeEditor : Editor {
     int addParamHab;
     int removeParamHab;
     int elimHab;
+    int selectedParam;
+    string form1, form2;
     
+    [System.Serializable]
     enum mostrar
     {
         Resumen,
@@ -30,9 +33,11 @@ public class HojaPersonajeEditor : Editor {
 
     // Update is called once per frame
     public override void OnInspectorGUI() {
+        //Nombre clase/raza de la hoja
         t.nombre = EditorGUILayout.TextField("Nombre", t.nombre);
+        //Como se manejarán los parámetros
         t.cambiarTipo((HojaPersonaje.TipoParametros)EditorGUILayout.EnumPopup("Tipo de parámetros", t.tipo));
-        if (t.tipo == HojaPersonaje.TipoParametros.unNivelATodosLosParametros)
+        if (t.tipo == HojaPersonaje.TipoParametros.unNivelATodosLosParametros || t.tipo == HojaPersonaje.TipoParametros.UnNivelAUnParametro)
         {
             parametros();
         }
@@ -42,6 +47,7 @@ public class HojaPersonajeEditor : Editor {
             gestores();
         }
 	}
+
     void parametros()
     {
         EditorGUILayout.BeginVertical("Button");
@@ -62,31 +68,50 @@ public class HojaPersonajeEditor : Editor {
             }
             EditorGUILayout.EndVertical();
             //Eliminar parametro
-            EditorGUILayout.BeginVertical("Button");
-            elimParam = EditorGUILayout.IntField("Numero parametro a eliminar", elimParam);
-            if (GUILayout.Button("Eliminar parametro"))
+            if (t.parametros.Count > 0)
             {
-                if (elimParam >= 0 && elimParam < t.parametros.Count) t.parametros.RemoveAt(elimParam);
+                EditorGUILayout.BeginHorizontal("Button");
+                elimParam = EditorGUILayout.IntSlider(elimParam, 0, t.parametros.Count-1);
+                if (GUILayout.Button("Eliminar parametro"))
+                {
+                    if (elimParam >= 0 && elimParam < t.parametros.Count) t.parametros.RemoveAt(elimParam);
+                }
+                EditorGUILayout.EndHorizontal();
             }
-            EditorGUILayout.EndVertical();
+            //Seleccionar parámetro
+            selectedParam = EditorGUILayout.Popup("Seleccione un parámetro", selectedParam, getListaParams());
+
             //Datos a mostrar/cambiar
-            for (int i = 0; i < t.parametros.Count; i++)
+            if (selectedParam >= 0 && selectedParam < t.parametros.Count)
             {
-                EditorGUILayout.LabelField("Parámetro n° " + (i + 1), EditorStyles.boldLabel);
-                t.parametros[i].nombre = EditorGUILayout.TextField("Nombre", t.parametros[i].nombre);
-                EditorGUILayout.TextField("nivel", (t.parametros[i].nivel + 1) + "");
-                EditorGUILayout.TextField("Valor actual", t.parametros[i].getValue());
+                EditorGUILayout.LabelField("Parámetro n° " + (selectedParam + 1), EditorStyles.boldLabel);
+                t.parametros[selectedParam].nombre = EditorGUILayout.TextField("Nombre", t.parametros[selectedParam].nombre);
+                EditorGUILayout.IntField("Nivel", t.parametros[selectedParam].nivel);
+                EditorGUILayout.TextField("Valor actual", t.parametros[selectedParam].getValue());
                 EditorGUILayout.Space();
 
-                t.parametros[i].cambiarRequiereValor(EditorGUILayout.Toggle("Requiere puntos", t.parametros[i].requiereCiertoValor));
-                t.parametros[i].setCount(EditorGUILayout.IntField("Cantidad niveles", t.parametros[i].valorNiveles.Count));
-                for (int j = 0; j < t.parametros[i].valorNiveles.Count; j++)
+                //Formulas
+                EditorGUILayout.BeginVertical("Button");
+                form1 = EditorGUILayout.TextField("Formula valores", form1);
+                if(GUILayout.Button("Calcular valores"))
+                {
+                    AK.ExpressionSolver expS = new AK.ExpressionSolver();
+                    for(int i = 0; i < t.parametros[selectedParam].valorNiveles.Count; i++)
+                    {
+                        t.parametros[selectedParam].setValueAt(expS.EvaluateExpression(form1.Replace("_N", (i + 1) + ""))+"", i);
+                    }
+                }
+                EditorGUILayout.EndVertical();
+
+                t.parametros[selectedParam].cambiarRequiereValor(EditorGUILayout.Toggle("Requiere puntos", t.parametros[selectedParam].requiereCiertoValor));
+                t.parametros[selectedParam].setCount(EditorGUILayout.IntField("Cantidad niveles", t.parametros[selectedParam].valorNiveles.Count));
+                for (int j = 0; j < t.parametros[selectedParam].valorNiveles.Count; j++)
                 {
                     EditorGUILayout.BeginVertical("Button");
                     EditorGUILayout.LabelField("Nivel " + (j + 1), EditorStyles.boldLabel);
-                    t.parametros[i].setValueAt(EditorGUILayout.TextField("Valor", t.parametros[i].valorNiveles[j]), j);
-                    if (t.parametros[i].requiereCiertoValor && j < t.parametros[i].valorNiveles.Count - 1)
-                        t.parametros[i].reqPuntos[j] = EditorGUILayout.IntField("Puntos requeridos", t.parametros[i].reqPuntos[j]);
+                    t.parametros[selectedParam].setValueAt(EditorGUILayout.TextField("Valor", t.parametros[selectedParam].valorNiveles[j]), j);
+                    if (t.parametros[selectedParam].requiereCiertoValor && j < t.parametros[selectedParam].valorNiveles.Count - 1)
+                        t.parametros[selectedParam].reqPuntos[j] = EditorGUILayout.IntField("Puntos requeridos", t.parametros[selectedParam].reqPuntos[j]);
                     EditorGUILayout.EndVertical();
                 }
             }
@@ -207,5 +232,15 @@ public class HojaPersonajeEditor : Editor {
             EditorGUILayout.EndVertical();
         }
         EditorGUILayout.EndVertical();
+    }
+
+    public string[] getListaParams()
+    {
+        string[] s = new string[t.parametros.Count];
+        for(int i=0;i< t.parametros.Count; i++)
+        {
+            s[i] = t.parametros[i].nombre;
+        }
+        return s;
     }
 }
