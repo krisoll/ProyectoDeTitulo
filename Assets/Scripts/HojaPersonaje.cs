@@ -7,11 +7,13 @@ public class HojaPersonaje : MonoBehaviour {
     public string nombre;
 
     public List<Parametro> parametros = new List<Parametro>();
+	public List<Skill> skill = new List<Skill>();
     public List<GestorParametros> gestores;
     public GestorParametros gestorGeneral;
 
     public bool hasExp = false;
     public List<int> expReq;
+
 
     public enum TipoParametros
     {
