@@ -2,9 +2,9 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(HojaPersonaje))]
-public class HojaPersonajeEditor : Editor {
-    HojaPersonaje t;
+[CustomEditor(typeof(HojaPersonajeV1))]
+public class HojaPersonajeEditorV1 : Editor {
+    HojaPersonajeV1 t;
     //Nuevo parametro
     string nombreNuevoParam;
     Parametro.TipoParametro tipoNuevoParametro;
@@ -28,7 +28,7 @@ public class HojaPersonajeEditor : Editor {
 
     void Awake()
     {
-        t = (HojaPersonaje)target;
+        t = (HojaPersonajeV1)target;
     }
 
     // Update is called once per frame
@@ -36,12 +36,12 @@ public class HojaPersonajeEditor : Editor {
         //Nombre clase/raza de la hoja
         t.nombre = EditorGUILayout.TextField("Nombre", t.nombre);
         //Como se manejarán los parámetros
-        t.cambiarTipo((HojaPersonaje.TipoParametros)EditorGUILayout.EnumPopup("Tipo de parámetros", t.tipo));
-        if (t.tipo == HojaPersonaje.TipoParametros.unNivelATodosLosParametros || t.tipo == HojaPersonaje.TipoParametros.UnNivelAUnParametro)
+        t.cambiarTipo((HojaPersonajeV1.TipoParametros)EditorGUILayout.EnumPopup("Tipo de parámetros", t.tipo));
+        if (t.tipo == HojaPersonajeV1.TipoParametros.unNivelATodosLosParametros || t.tipo == HojaPersonajeV1.TipoParametros.UnNivelAUnParametro)
         {
             parametros();
         }
-        else if (t.tipo == HojaPersonaje.TipoParametros.UnNivelAUnaHabilidad)
+        else if (t.tipo == HojaPersonajeV1.TipoParametros.UnNivelAUnaHabilidad)
         {
             parametros();
             gestores();
