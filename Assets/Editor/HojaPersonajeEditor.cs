@@ -7,7 +7,7 @@ public class HojaPersonajeEditorV1 : Editor {
     HojaPersonajeV1 t;
     //Nuevo parametro
     string nombreNuevoParam;
-    Parametro.TipoParametro tipoNuevoParametro;
+    ParametroV1.TipoParametro tipoNuevoParametro;
     int elimParam;
 
     string nombreNuevaHab;
@@ -58,10 +58,10 @@ public class HojaPersonajeEditorV1 : Editor {
             //Crear nuevo parametro
             EditorGUILayout.BeginVertical("Button");
             nombreNuevoParam = EditorGUILayout.TextField("Nombre parámetro", nombreNuevoParam);
-            tipoNuevoParametro = (Parametro.TipoParametro)EditorGUILayout.EnumPopup("Tipo de parámetros", tipoNuevoParametro);
+            tipoNuevoParametro = (ParametroV1.TipoParametro)EditorGUILayout.EnumPopup("Tipo de parámetros", tipoNuevoParametro);
             if (GUILayout.Button("Añadir parametro"))
             {
-                Parametro p = new Parametro();
+                ParametroV1 p = new ParametroV1();
                 p.nombre = nombreNuevoParam;
                 p.tipoParametro = tipoNuevoParametro;
                 t.parametros.Add(p);
@@ -173,7 +173,7 @@ public class HojaPersonajeEditorV1 : Editor {
                 addParamHab = EditorGUILayout.IntField("Numero parametro", addParamHab);
                 if (GUILayout.Button("Añadir parámetro") && addParamHab >= 0 && addParamHab < t.parametros.Count)
                 {
-                    Parametro p = t.parametros[addParamHab];
+                    ParametroV1 p = t.parametros[addParamHab];
                     bool encontrado = false;
                     for(int j=0;j< t.gestores[i].parametros.Count; j++)
                     {

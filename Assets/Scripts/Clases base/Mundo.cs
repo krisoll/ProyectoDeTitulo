@@ -9,15 +9,14 @@ public class Mundo : MonoBehaviour {
     public List<string> lugaresequip;
 	public List<string> bonos;
     public List<Calculo> calculos;
+    public List<HojaPersonaje> hojasDePersonaje;
 
     [System.Serializable]
     public class Variable
     {
         public string nombre;
         public bool tieneLimSup;
-        public int limSup;
         public bool tieneLimInf;
-        public int limInf;
     }
     [System.Serializable]
     public class Calculo

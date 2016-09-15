@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class HojaPersonajeV1 : MonoBehaviour {
     public string nombre;
 
-    public List<Parametro> parametros = new List<Parametro>();
+    public List<ParametroV1> parametros = new List<ParametroV1>();
 	public List<Skill> skill = new List<Skill>();
     public List<GestorParametros> gestores;
     public GestorParametros gestorGeneral;

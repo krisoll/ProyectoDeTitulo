@@ -15,7 +15,7 @@ public class GestorParametros {
         parametros = new List<Gestor>();
     }
 
-    public void addParam(ref Parametro par)
+    public void addParam(ref ParametroV1 par)
     {
         Gestor g = new Gestor(totalNiveles);
         g.param = par;
@@ -40,7 +40,7 @@ public class GestorParametros {
     [System.Serializable]
     public class Gestor
     {
-        public Parametro param;
+        public ParametroV1 param;
         public List<int> aumento;
 
         public Gestor(int i)

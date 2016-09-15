@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HojaPersonaje : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public string nombre;
+    public Mundo mundo;
+    public List<Parametro> parametros;
+    public List<int> espaciosEquipo;
+    public List<Bono> bonos;
 }
