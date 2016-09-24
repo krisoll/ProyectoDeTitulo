@@ -9,10 +9,10 @@ public class Parametro {
     {
         no,
         unoEnUno,
-        tabla
+        lista
     }
     public Upgradeable upgradeable;
-    public List<int> valor;
+    public List<int> valor = new List<int>();
     
 
 }

@@ -4,13 +4,13 @@
 	public class CustomFunction
 	{
 		public string name;
-		public System.Func<double[],double> funcmd;
-		public System.Func<object[],double> funcmo;
-		public System.Func<double,double> func1d;
+		public System.Func<int[],int> funcmd;
+		public System.Func<object[],int> funcmo;
+		public System.Func<int,int> func1d;
 		public int paramCount;
 		public bool enableSymbolicationTimeEvaluation;
 		
-		public CustomFunction(string name, int paramCount, System.Func<double[],double> func, bool enableSymbolicationTimeEvaluation)
+		public CustomFunction(string name, int paramCount, System.Func<int[],int> func, bool enableSymbolicationTimeEvaluation)
 		{
 			this.funcmd = func;
 			this.enableSymbolicationTimeEvaluation = enableSymbolicationTimeEvaluation;
@@ -18,7 +18,7 @@
 			this.name = name;
 		}
 
-		public CustomFunction(string name, int paramCount, System.Func<object[],double> func, bool enableSymbolicationTimeEvaluation)
+		public CustomFunction(string name, int paramCount, System.Func<object[],int> func, bool enableSymbolicationTimeEvaluation)
 		{
 			this.funcmo = func;
 			this.enableSymbolicationTimeEvaluation = enableSymbolicationTimeEvaluation;
@@ -26,7 +26,7 @@
 			this.name = name;
 		}
 
-		public CustomFunction(string name, System.Func<double,double> func, bool enableSymbolicationTimeEvaluation)
+		public CustomFunction(string name, System.Func<int,int> func, bool enableSymbolicationTimeEvaluation)
 		{
 			this.func1d = func;
 			this.enableSymbolicationTimeEvaluation = enableSymbolicationTimeEvaluation;
@@ -34,19 +34,19 @@
 			this.name = name;
 		}
 
-		public double Invoke(double[] p)
+		public int Invoke(int[] p)
 		{
 			return funcmd(p);
 		}
 
-		public double Invoke(object[] p)
+		public int Invoke(object[] p)
 		{
 			return funcmo(p);
 		}
 
-		public double Invoke(double x)
+		public int Invoke(int x)
 		{
-			return func1d != null ? func1d(x) : funcmd(new double[]{x});
+			return func1d != null ? func1d(x) : funcmd(new int[]{x});
 		}
 
 	}

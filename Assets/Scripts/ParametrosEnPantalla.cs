@@ -6,7 +6,6 @@ using Com.LuisPedroFonseca.ProCamera2D;
 
 public class ParametrosEnPantalla : MonoBehaviour {
     public ProCamera2DPointerInfluence pointerInf;
-    public Mundo mundo;
     public Personaje p;
     public GameObject cameraTarget;
     public GameObject paralax;
@@ -15,12 +14,19 @@ public class ParametrosEnPantalla : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (GameManager.gManager.mundo == null) return;
+        if (p.hoja == null)
+        {
+            if(GameManager.gManager.mundo == null || GameManager.gManager.mundo.hojasDePersonaje == null || GameManager.gManager.mundo.hojasDePersonaje.Count == 0) return;
+            p.hoja = GameManager.gManager.mundo.hojasDePersonaje[0];
+            p.Start();
+        }
         foreach(ListUI lui in ListaPorCategorias)
         {
             foreach (UIToScreen ui in lui.list)
             {
                 ui.UI.transform.position = ui.refPos.transform.position;
-                if (ui.texto != null) ui.texto.text = getResultado(ui.calculo) + "";
+                if (ui.texto != null) ui.texto.text = CommonFuncs.evaluateCalc(ui.calculo, p) + "";
             }
         }
         if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -38,27 +44,6 @@ public class ParametrosEnPantalla : MonoBehaviour {
         }
         if (paralax != null) paralax.transform.position = pointerInf.transform.position * paralaxMult;
 	}
-
-    public int getResultado(string calc)
-    {
-        AK.ExpressionSolver expS = new AK.ExpressionSolver();
-        return (int) expS.EvaluateExpression(reemplazarVariables(calc));
-    }
-
-    public string reemplazarVariables(string calc)
-    {
-        string res = calc;
-
-        for(int i = 0; i < p.nivelParametros.Count; i++)
-        {
-            res = res.Replace("v_" + mundo.parametrosFijos[p.hoja.parametros[i].idParametro], (p.hoja.parametros[i].valor[p.nivelParametros[i]]) + "");
-            res = res.Replace("n_" + mundo.parametrosFijos[p.hoja.parametros[i].idParametro], (p.nivelParametros[i] + 1) + "");
-            res = res.Replace("V_" + mundo.parametrosFijos[p.hoja.parametros[i].idParametro], (p.hoja.parametros[i].valor[p.nivelParametros[i]]) + "");
-            res = res.Replace("N_" + mundo.parametrosFijos[p.hoja.parametros[i].idParametro], (p.nivelParametros[i] + 1) + "");
-        }
-
-        return res;
-    }
 
     [System.Serializable]
     public class ListUI

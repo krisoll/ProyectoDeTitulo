@@ -20,7 +20,7 @@ namespace AK
 	public class Symbol
 	{
 		public SymbolType type;
-		public double _value;
+		public int _value;
 		public object ptr;
 
 		public Variable variable 
@@ -180,7 +180,7 @@ namespace AK
 			ptr = o.ptr;
 		}
 		
-		public double value 
+		public int value 
 		{
 			get
 			{
@@ -198,7 +198,7 @@ namespace AK
 			return type == SymbolType.StringLiteral || type == SymbolType.StringVariable;
 		}
 		
-		public Symbol(SymbolType type, double va)
+		public Symbol(SymbolType type, int va)
 		{
 			this.type = type;
 			_value = va;
@@ -216,7 +216,7 @@ namespace AK
 			this.subExpression = subExpression;
 		}
 		
-		public Symbol(double value)
+		public Symbol(int value)
 		{
 			type = SymbolType.RealValue;
 			_value = value;

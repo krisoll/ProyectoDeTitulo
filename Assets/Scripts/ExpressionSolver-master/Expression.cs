@@ -8,7 +8,7 @@ namespace AK
 		public Symbol root;
 		public Dictionary<string, Variable> constants = new Dictionary<string, Variable>();
 
-		public Variable SetVariable(string name, double value)
+		public Variable SetVariable(string name, int value)
 		{
 			Variable v;
 			if (constants.TryGetValue(name,out v))
@@ -65,7 +65,7 @@ namespace AK
 			}
 		}
 
-		public double Evaluate()
+		public int Evaluate()
 		{
 			return ExpressionSolver.GetSymbolValue(root);
 		}

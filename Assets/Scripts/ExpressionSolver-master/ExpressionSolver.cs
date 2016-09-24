@@ -46,10 +46,10 @@ namespace AK
 
 		public UndefinedVariablePolicy undefinedVariablePolicy;
 
-		private static Dictionary<string, double> immutableGlobalConstants = new Dictionary<string, double>()
+		private static Dictionary<string, int> immutableGlobalConstants = new Dictionary<string, int>()
 		{
-			{"e",System.Math.E},
-			{"pi",System.Math.PI}
+			{"e",(int)System.Math.E},
+			{"pi",(int)System.Math.PI}
 		};
 		private Dictionary<string, Variable> globalConstants = new Dictionary<string, Variable>();
 		private Dictionary<string, CustomFunction> customFuncs = new Dictionary<string, CustomFunction>();
@@ -57,30 +57,30 @@ namespace AK
 		public ExpressionSolver()
 		{
 			undefinedVariablePolicy = UndefinedVariablePolicy.Error;
-			AddCustomFunction("sin", delegate(double p) { return System.Math.Sin(p); },true);
-			AddCustomFunction("cos", delegate(double p) { return System.Math.Cos(p); },true);
-			AddCustomFunction("tan", delegate(double p) { return System.Math.Tan(p); },true);
-			AddCustomFunction("abs", delegate(double p) { return System.Math.Abs(p); },true);
-			AddCustomFunction("asin", delegate(double p) { return System.Math.Asin(p); },true);
-			AddCustomFunction("acos", delegate(double p) { return System.Math.Acos(p); },true);
-			AddCustomFunction("atan", delegate(double p) { return System.Math.Atan(p); },true);
-			AddCustomFunction("atan2",2, delegate(double[] p) {	return System.Math.Atan2(p[0],p[1]); },true);
-			AddCustomFunction("sqrt", delegate(double p) { return System.Math.Sqrt(p); },true);
-			AddCustomFunction("sign", delegate(double p) { return System.Math.Sign(p); },true);
-			AddCustomFunction("floor", delegate(double p) { return System.Math.Floor(p); },true);
-			AddCustomFunction("ceil", delegate(double p) { return System.Math.Ceiling(p); },true);
-			AddCustomFunction("min",2, delegate(double[] p) { return System.Math.Min(p[0],p[1]); },true);
-			AddCustomFunction("max",2, delegate(double[] p) { return System.Math.Max(p[0],p[1]); },true);
-			AddCustomFunction("sinh", delegate(double p) { return System.Math.Sinh(p); },true);
-			AddCustomFunction("exp", delegate(double p) { return System.Math.Exp(p); },true);
-			AddCustomFunction("cosh", delegate(double p) { return System.Math.Cosh(p); },true);
-			AddCustomFunction("tanh", delegate(double p) { return System.Math.Tanh(p); },true);
-			AddCustomFunction("log", delegate(double p) { return System.Math.Log(p); },true);
-			AddCustomFunction("log10", delegate(double p) { return System.Math.Log10(p); },true);
-			AddCustomFunction("round", delegate(double p) { return System.Math.Round(p); },true);
+			AddCustomFunction("sin", delegate(int p) { return (int)System.Math.Sin(p); },true);
+			AddCustomFunction("cos", delegate(int p) { return (int)System.Math.Cos(p); },true);
+			AddCustomFunction("tan", delegate(int p) { return (int)System.Math.Tan(p); },true);
+			AddCustomFunction("abs", delegate(int p) { return (int)System.Math.Abs(p); },true);
+			AddCustomFunction("asin", delegate(int p) { return (int)System.Math.Asin(p); },true);
+			AddCustomFunction("acos", delegate(int p) { return (int)System.Math.Acos(p); },true);
+			AddCustomFunction("atan", delegate(int p) { return (int)System.Math.Atan(p); },true);
+			AddCustomFunction("atan2",2, delegate(int[] p) {	return (int)System.Math.Atan2(p[0],p[1]); },true);
+			AddCustomFunction("sqrt", delegate(int p) { return (int)System.Math.Sqrt(p); },true);
+			AddCustomFunction("sign", delegate(int p) { return System.Math.Sign(p); },true);
+			AddCustomFunction("floor", delegate(int p) { return (int)System.Math.Floor((double)p); },true);
+			AddCustomFunction("ceil", delegate(int p) { return (int)System.Math.Ceiling((double)p); },true);
+			AddCustomFunction("min",2, delegate(int[] p) { return System.Math.Min(p[0],p[1]); },true);
+			AddCustomFunction("max",2, delegate(int[] p) { return System.Math.Max(p[0],p[1]); },true);
+			AddCustomFunction("sinh", delegate(int p) { return (int)System.Math.Sinh(p); },true);
+			AddCustomFunction("exp", delegate(int p) { return (int)System.Math.Exp(p); },true);
+			AddCustomFunction("cosh", delegate(int p) { return (int)System.Math.Cosh(p); },true);
+			AddCustomFunction("tanh", delegate(int p) { return (int)System.Math.Tanh(p); },true);
+			AddCustomFunction("log", delegate(int p) { return (int)System.Math.Log(p); },true);
+			AddCustomFunction("log10", delegate(int p) { return (int)System.Math.Log10(p); },true);
+			AddCustomFunction("round", delegate(int p) { return (int)System.Math.Round((double)p); },true);
 		}
 		
-		public void AddCustomFunction(string name, int paramCount, System.Func<double[],double> func, bool enableSymbolicationTimeEvaluation = false)
+		public void AddCustomFunction(string name, int paramCount, System.Func<int[],int> func, bool enableSymbolicationTimeEvaluation = false)
 		{
 			if (paramCount>MaxCustomFunctionParamCount)
 			{
@@ -89,7 +89,7 @@ namespace AK
 			customFuncs[name] = new CustomFunction(name, paramCount, func, enableSymbolicationTimeEvaluation);
 		}
 
-		public void AddCustomFunction(string name, int paramCount, System.Func<object[],double> func, bool enableSymbolicationTimeEvaluation = false)
+		public void AddCustomFunction(string name, int paramCount, System.Func<object[],int> func, bool enableSymbolicationTimeEvaluation = false)
 		{
 			if (paramCount>MaxCustomFunctionParamCount)
 			{
@@ -98,7 +98,7 @@ namespace AK
 			customFuncs[name] = new CustomFunction(name, paramCount, func, enableSymbolicationTimeEvaluation);
 		}
 
-		public void AddCustomFunction(string name, System.Func<double,double> func, bool enableSymbolicationTimeEvaluation = false)
+		public void AddCustomFunction(string name, System.Func<int,int> func, bool enableSymbolicationTimeEvaluation = false)
 		{
 			customFuncs[name] = new CustomFunction(name, func, enableSymbolicationTimeEvaluation);
 		}
@@ -113,7 +113,7 @@ namespace AK
 			return globalConstants[name];
 		}
 
-		public Variable SetGlobalVariable(string name, double value)
+		public Variable SetGlobalVariable(string name, int value)
 		{
 			Variable variable;
 			if (globalConstants.TryGetValue(name, out variable))
@@ -167,7 +167,7 @@ namespace AK
 			globalConstants.Clear();
 		}
 
-		public double EvaluateExpression(string formula)
+		public int EvaluateExpression(string formula)
 		{
 			return SymbolicateExpression(formula,(string[])null).Evaluate();
 		}
@@ -189,7 +189,7 @@ namespace AK
 					}
 					else
 					{
-						newExpression.SetVariable(localVariableName.Trim(),0.0);
+						newExpression.SetVariable(localVariableName.Trim(), (int)0.0);
 					}
 				}
 			}
@@ -211,11 +211,11 @@ namespace AK
 			return newExpression;
 		}
 
-		static double ParseSymbols(SymbolList syms) 
+		static int ParseSymbols(SymbolList syms) 
 		{
 			bool transformNextValue = false;
-			double sum = 0;
-			double curTerm = 0;
+			int sum = 0;
+			int curTerm = 0;
 			
 			SymbolType prevOper = SymbolType.OperatorAdd;
 			
@@ -232,7 +232,7 @@ namespace AK
 					case SymbolType.StringLiteral:
 					case SymbolType.StringVariable:
 					{
-						double value;
+						int value;
 						if (transformNextValue) 
 						{
 							var funcSymbol = symbolList[i-1];
@@ -240,7 +240,7 @@ namespace AK
 							{
 								case SymbolType.Pow:
 								{
-									value = System.Math.Pow(GetSymbolValue(s),GetSymbolValue(symbolList[i+1]));
+									value = (int)System.Math.Pow(GetSymbolValue(s),GetSymbolValue(symbolList[i+1]));
 									i++;
 									break;
 								}
@@ -264,7 +264,7 @@ namespace AK
 									}
 									else
 									{
-										double[] p = new double[MaxCustomFunctionParamCount];
+										int[] p = new int[MaxCustomFunctionParamCount];
 										p[0] = GetSymbolValue(s);
 										for (int g=1;g<customFunc.paramCount;g++)
 										{
@@ -320,7 +320,7 @@ namespace AK
 			return sum + curTerm;
 		}
 
-		public static double GetSymbolValue(Symbol s) 
+		public static int GetSymbolValue(Symbol s) 
 		{
 			return (s.type == SymbolType.RealValue) ? (s.ptr == null ? s.value : ((Variable)s.ptr).value ) : ParseSymbols((SymbolList)s.ptr);
 		}
@@ -384,8 +384,8 @@ namespace AK
 				return s;
 			}
 
-			double valueAsRealNumber;
-			if (double.TryParse(formula.Substring(begin,end-begin),out valueAsRealNumber))
+			int valueAsRealNumber;
+			if (int.TryParse(formula.Substring(begin,end-begin),out valueAsRealNumber))
 			{
 				return new Symbol(valueAsRealNumber);
 			}
@@ -453,10 +453,10 @@ namespace AK
 			}
 
 			// Immutable globals
-			double constDouble;
-			if (immutableGlobalConstants.TryGetValue(valueName, out constDouble)) 
+			int constint;
+			if (immutableGlobalConstants.TryGetValue(valueName, out constint)) 
 			{
-				return new Symbol(constDouble);
+				return new Symbol(constint);
 			}
 
 			// Found an unknown value name. Check policy to see what to do.
@@ -484,7 +484,7 @@ namespace AK
 			int currentTermBegin = begin;
 			int numValues = 0;
 			int currentDepth = 0;
-			double constMultiplier = 1.0;
+			int constMultiplier = (int)1.0;
 			bool divideNext = false;
 			bool constMultiplierUsed = false;
 			for (;;) 
@@ -624,7 +624,7 @@ namespace AK
 			
 			// We don't have that single expression, but:
 			// Now that we are here, we have symbol list which consists of only addition operators and value types. This is a great place to sum constant values together!
-			double constantSum = 0;
+			int constantSum = 0;
 			bool addedConstants = false;
 
 			for (int j = 0; j < symbols.Length; j++)

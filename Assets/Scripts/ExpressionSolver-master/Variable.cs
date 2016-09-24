@@ -3,7 +3,7 @@
 
 	public class Variable
 	{
-		public double value;
+		public int value;
 		public string stringValue = null;
 
 		public string name { get; private set; }
@@ -14,7 +14,7 @@
 			this.name = name;
 		}
 		
-		public Variable(string name, double v)
+		public Variable(string name, int v)
 		{
 			this.value=v;
 			this.name = name;

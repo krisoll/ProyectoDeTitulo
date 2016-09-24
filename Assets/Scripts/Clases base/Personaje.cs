@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Personaje : MonoBehaviour {
 
 	public string nombre;
+    [System.NonSerialized]
 	public HojaPersonaje hoja;
 	public List<int> nivelParametros;
 	public List<Equipable> equipo;
@@ -12,8 +13,9 @@ public class Personaje : MonoBehaviour {
 	public List<ModificadorEstado> modificadores;
     private int prevParam;
 
-    void Start()
+    public void Start()
     {
+        if (hoja == null) return;
         nivelParametros = new List<int>();
         for (int i = 0; i < hoja.parametros.Count; i++)
         {

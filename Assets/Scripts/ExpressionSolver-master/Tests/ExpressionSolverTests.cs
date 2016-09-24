@@ -5,7 +5,7 @@ namespace AK
 {
 	public static class ExpressionSolverTests
 	{
-		public static void AssertSameValue(double f1, double f2)
+		public static void AssertSameValue(int f1, int f2)
 		{
 			var diff = System.Math.Abs(f1-f2);
 			if (diff>0.0000001f)
@@ -37,42 +37,42 @@ namespace AK
 			{
 				var exp = solver.SymbolicateExpression("sin(1/(0.5*x))","x");
 				var x = 21.0;
-				exp.SetVariable("x",x);
-				AssertSameValue(exp.Evaluate(),System.Math.Sin(1/(0.5*x)) );
+				exp.SetVariable("x", (int)x);
+				AssertSameValue(exp.Evaluate(), (int)System.Math.Sin(1/(0.5*x)) );
 			}
 			{
 				var exp = solver.SymbolicateExpression("(1+1)+.5");
-				AssertSameValue(exp.Evaluate(),2.5f);
+				AssertSameValue(exp.Evaluate(), (int)2.5f);
 			}
 			{
 				var exp = solver.SymbolicateExpression("sin(2/(1-0.5*x))","x");
 				var x = 21.0;
-				exp.SetVariable("x",x);
-				AssertSameValue(exp.Evaluate(),System.Math.Sin(2/(1-0.5*x)) );
+				exp.SetVariable("x", (int)x);
+				AssertSameValue(exp.Evaluate(), (int)System.Math.Sin(2/(1-0.5*x)) );
 			}
 			{
 				var exp = solver.SymbolicateExpression("sin((2/(1-0.5*x))/2)","x");
 				var x = 21.0;
-				exp.SetVariable("x",x);
-				AssertSameValue(exp.Evaluate(),System.Math.Sin((2/(1-0.5*x))/2));
+				exp.SetVariable("x", (int)x);
+				AssertSameValue(exp.Evaluate(), (int)System.Math.Sin((2/(1-0.5*x))/2));
 			}
 			{
 				var exp = solver.SymbolicateExpression("1/(1+sin((2/(1-0.5*x))/2))","x");
 				var x = 21.0;
-				exp.SetVariable("x",x);
-				AssertSameValue(exp.Evaluate(),1/(1+System.Math.Sin((2/(1-0.5*x))/2)));
+				exp.SetVariable("x", (int)x);
+				AssertSameValue(exp.Evaluate(), (int)(1 /(1+System.Math.Sin((2/(1-0.5*x))/2))));
 			}
 			{
 				var exp = solver.SymbolicateExpression(" (1-(3*(x/( (x+22)/x)-1*2*x))^0.5)/(x+1) ","x");
 				var x = -21.0;
-				exp.SetVariable("x",x);
-				AssertSameValue(exp.Evaluate(), (1-System.Math.Pow(3*(x/( (x+22)/x)-1*2*x),0.5))/(x+1) );
+				exp.SetVariable("x", (int)x);
+				AssertSameValue(exp.Evaluate(), (int)((1-System.Math.Pow(3*(x/( (x+22)/x)-1*2*x),0.5))/(x+1) ));
 			}
 			{
 				var exp = solver.SymbolicateExpression("(1+1/x)^x","x");
 				var x = 30000000.0;
-				exp.SetVariable("x",x);
-				AssertSameValue(exp.Evaluate(),System.Math.E);
+				exp.SetVariable("x", (int)x);
+				AssertSameValue(exp.Evaluate(), (int)System.Math.E);
 			}
 		}
 
@@ -119,16 +119,16 @@ namespace AK
 				return ((string)p[0]).Length;
 			},true);
 			var exp = solver.SymbolicateExpression("strlen('123')");
-			AssertSameValue(exp.Evaluate(),3.0);
+			AssertSameValue(exp.Evaluate(), (int)3.0);
 			exp = solver.SymbolicateExpression("strlen('12\\'3')");
-			AssertSameValue(exp.Evaluate(),4.0);
+			AssertSameValue(exp.Evaluate(), (int)4.0);
 			exp = solver.SymbolicateExpression("strlen('12\\'3 4')");
-			AssertSameValue(exp.Evaluate(),6.0);
+			AssertSameValue(exp.Evaluate(), (int)6.0);
 			solver.AddCustomFunction("strlen2",2, delegate(object[] p) {
-				return ((string)p[0]).Length*(double)p[1];
+				return ((string)p[0]).Length*(int)p[1];
 			});
 			exp = solver.SymbolicateExpression("strlen2('12\\'3 4',2.5)");
-			AssertSameValue(exp.Evaluate(),6.0*2.5);
+			AssertSameValue(exp.Evaluate(), (int)(6.0 *2.5));
 
 			string[] erroneousStrings = new string[]{"strlen(''')","strlen('''')","''"};
 			foreach (var errorString in erroneousStrings)
@@ -173,7 +173,7 @@ namespace AK
 			AssertSameValue(exp.Evaluate(),1);
 			try
 			{
-				solver.SetGlobalVariable("striva",42141.0);
+				solver.SetGlobalVariable("striva", (int)42141.0);
 				Assert(false);
 			}
 			catch (ESParameterTypeChangedException)
@@ -208,8 +208,8 @@ namespace AK
 			var exp5 = solver.SymbolicateExpression("exp(log(6))");
 			AssertSameValue(exp5.Evaluate(),6);
 			var rnd = new System.Random();
-			solver.AddCustomFunction("Rnd1",2, delegate(double[] p) {
-				return p[0] + (p[1]-p[0])*(rnd.NextDouble());
+			solver.AddCustomFunction("Rnd1",2, delegate(int[] p) {
+				return p[0] + (p[1]-p[0])*((int)rnd.NextDouble());
 			},false);
 			var exp6 = solver.SymbolicateExpression("Rnd1(0,1)");
 			var firstRnd = exp6.Evaluate();
@@ -228,20 +228,20 @@ namespace AK
 					throw new System.Exception("ExpressionSolverTest failed");
 				}
 			}
-			solver.AddCustomFunction("Rnd2",2, delegate(double[] p) {
-				return p[0] + (p[1]-p[0])*(rnd.NextDouble());
+			solver.AddCustomFunction("Rnd2",2, delegate(int[] p) {
+				return p[0] + (p[1]-p[0])*((int)rnd.NextDouble());
 			},true);
 			var exp7 = solver.SymbolicateExpression("Rnd2(0,1)");
 			AssertSameValue(exp7.Evaluate(),exp7.Evaluate());
 			var exp8 = solver.SymbolicateExpression("cos(0)+1*2");
 			AssertSameValue(exp8.Evaluate(),3);
-			solver.AddCustomFunction("dist",5, delegate(double[] p) {
-				return System.Math.Pow( (p[2]-p[0])*(p[2]-p[0]) + (p[3]-p[1])*(p[3]-p[1])    ,p[4]);
+			solver.AddCustomFunction("dist",5, delegate(int[] p) {
+				return (int)System.Math.Pow( (p[2]-p[0])*(p[2]-p[0]) + (p[3]-p[1])*(p[3]-p[1])    ,p[4]);
 			},true);
 			var exp9 = solver.SymbolicateExpression("dist(3*x,(4*x),+6*x,-1*x,sin(x))","x");
-			double x = 21;
+			int x = 21;
 			exp9.SetVariable("x",x);
-			AssertSameValue(exp9.Evaluate(),System.Math.Pow( (3*x-6*x)*(3*x-6*x)+(4*x+x)*(4*x+x),System.Math.Sin(x)  ));
+			AssertSameValue(exp9.Evaluate(), (int)System.Math.Pow( (3*x-6*x)*(3*x-6*x)+(4*x+x)*(4*x+x),System.Math.Sin(x)  ));
 		}
 
 		public static void TestSum()
@@ -249,7 +249,7 @@ namespace AK
 			const int N = 10000;
 			ExpressionSolver solver = new ExpressionSolver();
 			var exp = solver.SymbolicateExpression("1/2^i","i");
-			double sum = 0;
+			int sum = 0;
 			for (int i=0;i<N;i++)
 			{
 				exp.SetVariable("i",i);
@@ -288,7 +288,7 @@ namespace AK
 			var exp3 = solver.SymbolicateExpression("sin(test3)");
 			var test3 = exp3.GetVariable("test3");
 			AssertSameValue(test3.value,0);
-			test3.value = System.Math.PI/2;
+			test3.value = (int)(System.Math.PI/2);
 			AssertSameValue(exp3.Evaluate(),1);
 		}
 
@@ -297,10 +297,10 @@ namespace AK
 			ExpressionSolver solver = new ExpressionSolver();
 			solver.SetGlobalVariable("test",1);
 			var exp1 = solver.SymbolicateExpression("test+1");
-			AssertSameValue(2.0,exp1.Evaluate());
+			AssertSameValue((int)2.0,exp1.Evaluate());
 			solver.SetGlobalVariable("test",2);
 			var exp2 = solver.SymbolicateExpression("test+1");
-			AssertSameValue(3.0,exp2.Evaluate());
+			AssertSameValue((int)3.0,exp2.Evaluate());
 			AssertSameValue(exp1.Evaluate(),exp2.Evaluate());
 		}
 
@@ -308,9 +308,9 @@ namespace AK
 		{
 			ExpressionSolver solver = new ExpressionSolver();
 			var exp1 = solver.SymbolicateExpression("test+1",new string[]{"test"});
-			exp1.SetVariable("test",1.0);
+			exp1.SetVariable("test", (int)1.0);
 			var exp2 = solver.SymbolicateExpression("test+1","test"); // If you define only one variable, you don't need to use the string[] format
-			exp2.SetVariable("test",2.0);
+			exp2.SetVariable("test", (int)2.0);
 			solver.SetGlobalVariable("test",1000); // If there is name clash with a exp-local variable, we prefer the exp-local variable.
 			AssertSameValue(exp1.Evaluate(),2);
 			AssertSameValue(exp2.Evaluate(),3);

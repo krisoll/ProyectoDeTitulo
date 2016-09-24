@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HojaPersonaje : MonoBehaviour {
+[System.Serializable]
+public class HojaPersonaje
+{
     public string nombre;
-    public Mundo mundo;
-    public List<Parametro> parametros;
-    public List<int> espaciosEquipo;
-    public List<Bono> bonos;
+    public List<Parametro> parametros = new List<Parametro>();
+    public List<int> espaciosEquipo = new List<int>();
+    public List<Bono> bonos = new List<Bono>();
 }
